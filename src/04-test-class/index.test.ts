@@ -1,9 +1,46 @@
-// Uncomment the code below and write your tests
-// import { getBankAccount } from '.';
+import {
+  BankAccount,
+  getBankAccount,
+  /*TransferFailedError,*/
+  /*SynchronizationFailedError,*/
+  /*InsufficientFundsError,*/
+} from './index';
 
-describe('BankAccount', () => {
-  test('should create account with initial balance', () => {
-    // Write your test here
+type BankAccountType = BankAccount;
+
+type BankTransferDetails = {
+  account: BankAccountType;
+  toAccount: BankAccountType;
+  initialBalance: number;
+  insufficientAmount: number;
+  amount: number;
+};
+
+const initialBalance = 100000;
+
+const transferDetails: BankTransferDetails = {
+  account: new BankAccount(initialBalance),
+  toAccount: new BankAccount(initialBalance),
+  initialBalance,
+  insufficientAmount: initialBalance + 0.001,
+  amount: 100_000,
+};
+
+describe('BankAccount', (): void => {
+  beforeEach(
+    () =>
+      (transferDetails.account = getBankAccount(
+        transferDetails.initialBalance,
+      )),
+  );
+
+  test('should create account with initial balance', (): void => {
+    expect(getBankAccount(transferDetails.initialBalance)).toStrictEqual(
+      transferDetails.account,
+    );
+    expect(transferDetails.account.getBalance()).toEqual(
+      transferDetails.initialBalance,
+    );
   });
 
   test('should throw InsufficientFundsError error when withdrawing more than balance', () => {
