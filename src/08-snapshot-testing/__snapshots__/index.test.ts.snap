@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generateLinkedList should generate linked list from values 2 1`] = `
+{
+  "next": {
+    "next": {
+      "next": {
+        "next": {
+          "next": null,
+          "value": null,
+        },
+        "value": {
+          "id": 8,
+          "name": "Brion James",
+          "role": "General Munro",
+        },
+      },
+      "value": {
+        "id": 7,
+        "name": "Tommy Lister Jr",
+        "role": "President Lindberg",
+      },
+    },
+    "value": {
+      "id": 6,
+      "name": "Ian Holm",
+      "role": "Vito Cornelius",
+    },
+  },
+  "value": {
+    "id": 5,
+    "name": "Maiwenn",
+    "role": "Diva Pavalaguna",
+  },
+}
+`;
