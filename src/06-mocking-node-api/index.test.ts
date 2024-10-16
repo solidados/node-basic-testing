@@ -1,39 +1,60 @@
-// Uncomment the code below and write your tests
-// import { readFileAsynchronously, doStuffByTimeout, doStuffByInterval } from '.';
+import {
+  /*readFileAsynchronously,*/
+  doStuffByTimeout,
+  doStuffByInterval,
+} from './index';
 
-describe('doStuffByTimeout', () => {
-  beforeAll(() => {
-    jest.useFakeTimers();
+const callback = (): null => null;
+let interval: number;
+const timeout = (interval = 1000);
+
+describe('doStuffByTimeout', (): void => {
+  let spyTimeout: jest.SpyInstance;
+
+  beforeAll(() => jest.useFakeTimers());
+  beforeEach(() => (spyTimeout = jest.spyOn(global, 'setTimeout')));
+  afterEach(() => jest.clearAllMocks());
+  afterAll(() => jest.useRealTimers());
+
+  test('should set timeout with provided callback and timeout', (): void => {
+    doStuffByTimeout(callback, timeout);
+    expect(spyTimeout).toBeCalledWith(callback, timeout);
   });
 
-  afterAll(() => {
-    jest.useRealTimers();
-  });
+  test('should call callback only after timeout', (): void => {
+    const mockCallback: jest.Mock = jest.fn(callback);
 
-  test('should set timeout with provided callback and timeout', () => {
-    // Write your test here
-  });
+    doStuffByTimeout(mockCallback, timeout);
+    expect(mockCallback).not.toBeCalled();
 
-  test('should call callback only after timeout', () => {
-    // Write your test here
+    jest.advanceTimersByTime(timeout);
+    expect(mockCallback).toBeCalledTimes(1);
   });
 });
 
-describe('doStuffByInterval', () => {
-  beforeAll(() => {
-    jest.useFakeTimers();
+describe('doStuffByInterval', (): void => {
+  let spyInterval: jest.SpyInstance;
+
+  beforeAll(() => jest.useFakeTimers());
+  beforeEach(() => (spyInterval = jest.spyOn(global, 'setInterval')));
+  afterEach(() => jest.clearAllMocks());
+  afterAll(() => jest.useRealTimers());
+
+  test('should set interval with provided callback and timeout', (): void => {
+    doStuffByInterval(callback, interval);
+    expect(spyInterval).toBeCalledWith(callback, interval);
   });
 
-  afterAll(() => {
-    jest.useRealTimers();
-  });
+  test('should call callback multiple times after multiple intervals', (): void => {
+    const mockCallback: jest.Mock = jest.fn(callback);
 
-  test('should set interval with provided callback and timeout', () => {
-    // Write your test here
-  });
+    doStuffByInterval(mockCallback, timeout);
+    expect(mockCallback).not.toBeCalled();
 
-  test('should call callback multiple times after multiple intervals', () => {
-    // Write your test here
+    Array.from({ length: 5 }).forEach((_, i): void => {
+      jest.advanceTimersByTime(interval);
+      expect(mockCallback).toBeCalledTimes(i + 1);
+    });
   });
 });
 
